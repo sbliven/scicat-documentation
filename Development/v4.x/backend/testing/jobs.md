@@ -357,3 +357,26 @@ Other jobs test files are separated into distinct ones based on the authorizatio
 | 0340 | Fullquery jobs as a user from ADMIN_GROUPS that were created by User5.1, limited by 5 | GET | /api/v4/Jobs?createdBy=user5.1&limit=5 | admin | 200 | ```SuccessfulGetStatusCode``` |
 | 0350 | Fullquery jobs as a user from ADMIN_GROUPS that were created by User5.2 | GET | /api/v4/Jobs?createdBy=user5.2 | admin | 200 | ```SuccessfulGetStatusCode``` |
 | 0360 | Fullfacet jobs as a user from ADMIN_GROUPS that were created by User5.1 | GET | /api/v4/Jobs/facet?createdBy=user5.1 | admin | 200 | ```SuccessfulGetStatusCode``` |
+
+
+### 1190: Jobs: Test Backwards Compatibility
+| Test Number | Description | HTTP Method | Endpoint | Authenticated User | Expected Request Status | Expected Request Code |
+| ----- | ----- | ----- | ----- | ----- | ----- | ----- |
+| 0010 | Add dataset 1 as Admin Ingestor | POST | /api/v3/Datasets | adminIngestor | 201 | ```EntryCreatedStatusCode``` |
+| 0020 | Add via /api/v3 a new job without datasetList as a user from ADMIN_GROUPS in '#all' configuration, which should fail | POST | /api/v3/Jobs | admin | 400 | ```BadRequestStatusCode``` |
+| 0030 | Add via /api/v3 a new job as a user from ADMIN_GROUPS in '#all' configuration | POST | /api/v3/Jobs | admin | 201 | ```EntryCreatedStatusCode``` |
+| 0040 | Add via /api/v3 a new job with a complete dto as a user from ADMIN_GROUPS in '#all' configuration | POST | /api/v3/Jobs | admin | 201 | ```EntryCreatedStatusCode``` |
+| 0050 | Get via /api/v4 the previously added job as a user from ADMIN_GROUPS | GET | /api/v4/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0060 | Add a status update via /api/v3 without jobStatusMessage to a job as a user from ADMIN_GROUPS for his/her job in '#all' configuration, which should fail | PATCH | /api/v3/Jobs | admin | 400 | ```BadRequestStatusCode``` |
+| 0070 | Add a status update via /api/v3 to a job as a user from ADMIN_GROUPS for his/her job in '#all' configuration | PATCH | /api/v3/Jobs | admin | 200 | ```SuccessfulPatchStatusCode``` |
+| 0080 | Get via /api/v4 the previously updated job as a user from ADMIN_GROUPS | GET | /api/v4/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0090 | Add a status update via /api/v4 to a job that was created via /api/v3, as a user from ADMIN_GROUPS for his/her job in '#all' configuration | PATCH | /api/v4/Jobs | admin | 200 | ```SuccessfulPatchStatusCode``` |
+| 0100 | Get via /api/v3 the job that was previously updated via /api/v4, as a user from ADMIN_GROUPS for his/her job in '#all' configuration | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0110 | Get via /api/v3 all accessible jobs as a user from ADMIN_GROUPS | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0120 | Fullquery via /api/v3 all accessible jobs as a user from ADMIN_GROUPS | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0130 | Fullfacet via /api/v3 jobs that were created by admin as a user from ADMIN_GROUPS | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0140 | Delete via /api/v3 a job created by admin as admin | DELETE | /api/v3/Jobs | admin | 200 | ```SuccessfulDeleteStatusCode``` |
+| 0150 | Get via /api/v3 all accessible jobs as a user from ADMIN_GROUPS, which should be one less than before, proving that delete works | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0160 | Add via /api/v4 a new job as a user from ADMIN_GROUPS in '#all' configuration | POST | /api/v4/Jobs | admin | 201 | ```EntryCreatedStatusCode``` |
+| 0170 | Get via /api/v3 the job that was previously added via /api/v4, as a user from ADMIN_GROUPS for his/her job in '#all' configuration | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0180 | Add a status update via /api/v3 to a job that was created via /api/v4, as a user from ADMIN_GROUPS for his/her job in '#all' configuration | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulPatchStatusCode``` |
