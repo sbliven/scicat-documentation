@@ -363,20 +363,42 @@ Other jobs test files are separated into distinct ones based on the authorizatio
 | Test Number | Description | HTTP Method | Endpoint | Authenticated User | Expected Request Status | Expected Request Code |
 | ----- | ----- | ----- | ----- | ----- | ----- | ----- |
 | 0010 | Add dataset 1 as Admin Ingestor | POST | /api/v3/Datasets | adminIngestor | 201 | ```EntryCreatedStatusCode``` |
-| 0020 | Add via /api/v3 a new job without datasetList as a user from ADMIN_GROUPS in '#all' configuration, which should fail | POST | /api/v3/Jobs | admin | 400 | ```BadRequestStatusCode``` |
-| 0030 | Add via /api/v3 a new job as a user from ADMIN_GROUPS in '#all' configuration | POST | /api/v3/Jobs | admin | 201 | ```EntryCreatedStatusCode``` |
-| 0040 | Add via /api/v3 a new job with a complete dto as a user from ADMIN_GROUPS in '#all' configuration | POST | /api/v3/Jobs | admin | 201 | ```EntryCreatedStatusCode``` |
-| 0050 | Get via /api/v4 the previously added job as a user from ADMIN_GROUPS | GET | /api/v4/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
-| 0060 | Add a status update via /api/v3 without jobStatusMessage to a job as a user from ADMIN_GROUPS for his/her job in '#all' configuration, which should fail | PATCH | /api/v3/Jobs | admin | 400 | ```BadRequestStatusCode``` |
-| 0070 | Add a status update via /api/v3 to a job as a user from ADMIN_GROUPS for his/her job in '#all' configuration | PATCH | /api/v3/Jobs | admin | 200 | ```SuccessfulPatchStatusCode``` |
-| 0080 | Get via /api/v4 the previously updated job as a user from ADMIN_GROUPS | GET | /api/v4/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
-| 0090 | Add a status update via /api/v4 to a job that was created via /api/v3, as a user from ADMIN_GROUPS for his/her job in '#all' configuration | PATCH | /api/v4/Jobs | admin | 200 | ```SuccessfulPatchStatusCode``` |
-| 0100 | Get via /api/v3 the job that was previously updated via /api/v4, as a user from ADMIN_GROUPS for his/her job in '#all' configuration | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
-| 0110 | Get via /api/v3 all accessible jobs as a user from ADMIN_GROUPS | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
-| 0120 | Fullquery via /api/v3 all accessible jobs as a user from ADMIN_GROUPS | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
-| 0130 | Fullfacet via /api/v3 jobs that were created by admin as a user from ADMIN_GROUPS | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
-| 0140 | Delete via /api/v3 a job created by admin as admin | DELETE | /api/v3/Jobs | admin | 200 | ```SuccessfulDeleteStatusCode``` |
-| 0150 | Get via /api/v3 all accessible jobs as a user from ADMIN_GROUPS, which should be one less than before, proving that delete works | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
-| 0160 | Add via /api/v4 a new job as a user from ADMIN_GROUPS in '#all' configuration | POST | /api/v4/Jobs | admin | 201 | ```EntryCreatedStatusCode``` |
-| 0170 | Get via /api/v3 the job that was previously added via /api/v4, as a user from ADMIN_GROUPS for his/her job in '#all' configuration | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
-| 0180 | Add a status update via /api/v3 to a job that was created via /api/v4, as a user from ADMIN_GROUPS for his/her job in '#all' configuration | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulPatchStatusCode``` |
+| 0020 | Add dataset 2 as Admin Ingestor | POST | /api/v3/Datasets | adminIngestor | 201 | ```EntryCreatedStatusCode``` |
+| 0030 | Add via /api/v3 a new job without datasetList, as a user from ADMIN_GROUPS, which should fail | POST | /api/v3/Jobs | admin | 400 | ```BadRequestStatusCode``` |
+| 0040 | Add via /api/v3 a new job ignoring datasetList from jobParams, as a user from ADMIN_GROUPS, which should fail | POST | /api/v3/Jobs | admin | 400 | ```BadRequestStatusCode``` |
+| 0050 | Add via /api/v3 an anonymous job as a user from ADMIN_GROUPS | POST | /api/v3/Jobs | admin | 201 | ```EntryCreatedStatusCode``` |
+| 0060 | Get via /api/v4 the anonymous job as a user from ADMIN_GROUPS | GET | /api/v4/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0070 | Get via /api/v3 the anonymous job as user1, which should fail | GET | /api/v3/Jobs | user1 | 403 | ```AccessForbiddenStatusCode``` |
+| 0080 | Get via /api/v4 the anonymous job as user1, which should fail | GET | /api/v4/Jobs | user1 | 403 | ```AccessForbiddenStatusCode``` |
+| 0090 | Add via /api/v3 a new job with emailJobInitiator for user1, as a user from ADMIN_GROUPS | POST | /api/v3/Jobs | admin | 201 | ```EntryCreatedStatusCode``` |
+| 0100 | Get via /api/v4 the job added for user1, as a user from ADMIN_GROUPS | GET | /api/v4/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0110 | Get via /api/v4 the job added for user1, as user1, which should fail because ownerUser does not exist | GET | /api/v4/Jobs | user1 | 403 | ```AccessForbiddenStatusCode``` |
+| 0120 | Get via /api/v3 the job added for user1, as user1, which should fail because ownerUser does not exist | GET | /api/v3/Jobs | user1 | 403 | ```AccessForbiddenStatusCode``` |
+| 0130 | Add via /api/v3 a new job with a complete dto for user1 and other contactEmail, as a user from ADMIN_GROUPS | POST | /api/v3/Jobs | admin | 201 | ```EntryCreatedStatusCode``` |
+| 0140 | Get via /api/v4 the job added for user1, as a user from ADMIN_GROUPS | GET | /api/v4/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0150 | Get via /api/v4 the job added for user1, as user1 | GET | /api/v4/Jobs | user1 | 200 | ```SuccessfulGetStatusCode``` |
+| 0160 | Get via /api/v3 the job added for user1, as user1 | GET | /api/v3/Jobs | user1 | 200 | ```SuccessfulGetStatusCode``` |
+| 0170 | Add via /api/v3 a new job without specifying username for user1, as user1, which should fail | POST | /api/v3/Jobs | user1 | 400 | ```BadRequestStatusCode``` |
+| 0180 | Add via /api/v3 a new job specifying only emailJobInitiator for user1, as user1, which should fail | POST | /api/v3/Jobs | user1 | 400 | ```BadRequestStatusCode``` |
+| 0190 | Add via /api/v3 a new job with complete dto for user1, as user1 | POST | /api/v3/Jobs | user1 | 201 | ```EntryCreatedStatusCode``` |
+| 0200 | Get via /api/v4 the job added for user1, as user1 | GET | /api/v4/Jobs | user1 | 200 | ```SuccessfulGetStatusCode``` |
+| 0210 | Get via /api/v3 the job added for user1, as user1 | GET | /api/v3/Jobs | user1 | 200 | ```SuccessfulGetStatusCode``` |
+| 0220 | Add a status update via /api/v3 without jobStatusMessage to a job, as a user from ADMIN_GROUPS, which should fail | PATCH | /api/v3/Jobs | admin | 400 | ```BadRequestStatusCode``` |
+| 0230 | Add a status update via /api/v3 to a job as a user from ADMIN_GROUPS for his/her job | PATCH | /api/v3/Jobs | admin | 200 | ```SuccessfulPatchStatusCode``` |
+| 0240 | Get via /api/v4 the previously updated job as a user from ADMIN_GROUPS | GET | /api/v4/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0250 | Add a status update via /api/v4 to a job that was created via /api/v3, as user1 for his/her job | PATCH | /api/v4/Jobs | user1 | 200 | ```SuccessfulPatchStatusCode``` |
+| 0260 | Get via /api/v3 the job that was previously updated via /api/v4, as user1 for his/her job | GET | /api/v3/Jobs | user1 | 200 | ```SuccessfulGetStatusCode``` |
+| 0270 | Get via /api/v3 all accessible jobs as user1 | GET | /api/v3/Jobs | user1 | 200 | ```SuccessfulGetStatusCode``` |
+| 0280 | Get via /api/v3 all accessible jobs as a user from ADMIN_GROUPS | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0290 | Fullquery via /api/v3 all jobs that were created by user1, as user1 | GET | /api/v3/Jobs?createdBy=user1 | user1 | 200 | ```SuccessfulGetStatusCode``` |
+| 0300 | Fullfacet via /api/v3 jobs that were created by admin, as a user from ADMIN_GROUPS | GET | /api/v3/Jobs?createdBy=admin | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0310 | Fullfacet via /api/v3 jobs that were created by user1, as a user from ADMIN_GROUPS | GET | /api/v3/Jobs?createdBy=user1 | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0320 | Delete via /api/v3 a job created by admin, as a user from ADMIN_GROUPS | DELETE | /api/v3/Jobs | admin | 200 | ```SuccessfulDeleteStatusCode``` |
+| 0330 | Get via /api/v3 all accessible jobs as a user from ADMIN_GROUPS, which should be one less than before, proving that delete works | GET | /api/v3/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0340 | Add via /api/v3 an anonymous job as user1, which should fail | POST | /api/v3/Jobs | user1 | 400 | ```BadRequestStatusCode``` |
+| 0350 | Add via /api/v3 an anonymous job as user1, providing another contactEmail, which should fail | POST | /api/v3/Jobs | user1 | 400 | ```BadRequestStatusCode``` |
+| 0360 | Add via /api/v3 a job for another user, as user1, which should fail | POST | /api/v3/Jobs | user1 | 400 | ```BadRequestStatusCode``` |
+| 0370 | Add a new job as anonymous user with all published datasets | POST | /api/v3/Jobs | unauthenticated | 201 | ```EntryCreatedStatusCode``` |
+| 0380 | Get via /api/v4 the anonymous job as a user from ADMIN_GROUPS | GET | /api/v4/Jobs | admin | 200 | ```SuccessfulGetStatusCode``` |
+| 0390 | Get via /api/v3 the anonymous job as user1, which should fail | GET | /api/v3/Jobs | user1 | 403 | ```AccessForbiddenStatusCode``` |
+| 0400 | Get via /api/v3 the anonymous job as the user of its contactEmail, which should fail | GET | /api/v3/Jobs | user2 | 403 | ```AccessForbiddenStatusCode``` |
